@@ -1,0 +1,19 @@
+{
+  "name": "openpgp-bhk",
+  "version": "0.1.1",
+  "description": "OpenGPG Node by BHK.",
+  "author": "Ahmed BHK <benhadjkhelifa.ahmed@gmail.com>",
+  "dependencies": {
+    "openpgp": "^5.11.1"
+  },
+  "keywords": [
+    "node-red",
+    "PGP",
+    "OpenPGP"
+  ],
+  "node-red": {
+    "nodes": {
+      "opengpg": "openpgp/openpgp.js"
+    }
+  }
+}
