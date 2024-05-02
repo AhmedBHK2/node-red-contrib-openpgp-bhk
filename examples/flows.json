@@ -1,0 +1,235 @@
+[
+    {
+        "id": "155f2ba0ea578ebf",
+        "type": "tab",
+        "label": "node-red-contrib-openpgp-bhk-sample",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a7eee3090ba27c4d",
+        "type": "debug",
+        "z": "155f2ba0ea578ebf",
+        "name": "unsigned",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1460,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "8569b599a4858018",
+        "type": "PGP_GENERATE_KEY_PAIR",
+        "z": "155f2ba0ea578ebf",
+        "name": "PGP_GENERATE_KEY_PAIR",
+        "x": 450,
+        "y": 200,
+        "wires": [
+            [
+                "88ff0fd5b285ac0d",
+                "8ca477af0ac7f956"
+            ]
+        ]
+    },
+    {
+        "id": "05f677f5b0d3ce9a",
+        "type": "function",
+        "z": "155f2ba0ea578ebf",
+        "name": "generateKeyPair",
+        "func": "msg.encryption = {}\nmsg.encryption.name = encodeURIComponent(\"Ahmed\")\nmsg.encryption.email = encodeURIComponent(\"test@gmail.com\")\n\nmsg.encryption.passPhrase = encodeURIComponent(\"test\")\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 200,
+        "wires": [
+            [
+                "8569b599a4858018"
+            ]
+        ]
+    },
+    {
+        "id": "db6bb243f0cf6986",
+        "type": "inject",
+        "z": "155f2ba0ea578ebf",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 100,
+        "wires": [
+            [
+                "05f677f5b0d3ce9a"
+            ]
+        ]
+    },
+    {
+        "id": "325fad4b502988c4",
+        "type": "PGP_ENCRYPT",
+        "z": "155f2ba0ea578ebf",
+        "name": "PGP_ENCRYPT",
+        "x": 870,
+        "y": 200,
+        "wires": [
+            [
+                "1c6009a8ae5091a5"
+            ]
+        ]
+    },
+    {
+        "id": "88ff0fd5b285ac0d",
+        "type": "function",
+        "z": "155f2ba0ea578ebf",
+        "name": "encrypt",
+        "func": "msg.encryption.serverPublicKey = msg.keyPair.publicKey\nmsg.encryption.rawText = \"test encrypt\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 200,
+        "wires": [
+            [
+                "325fad4b502988c4"
+            ]
+        ]
+    },
+    {
+        "id": "0474215fbb076b91",
+        "type": "PGP_DECRYPT",
+        "z": "155f2ba0ea578ebf",
+        "name": "PGP_DECRYPT",
+        "x": 1270,
+        "y": 200,
+        "wires": [
+            [
+                "a7eee3090ba27c4d"
+            ]
+        ]
+    },
+    {
+        "id": "1c6009a8ae5091a5",
+        "type": "function",
+        "z": "155f2ba0ea578ebf",
+        "name": "decrypt",
+        "func": "msg.encryption.userPrivateKey = msg.keyPair.privateKey\nmsg.encryption.encryptedMessage = msg.encrypted\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 200,
+        "wires": [
+            [
+                "0474215fbb076b91"
+            ]
+        ]
+    },
+    {
+        "id": "a5343258cdbf61ab",
+        "type": "debug",
+        "z": "155f2ba0ea578ebf",
+        "name": "Signed",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1460,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "2e89975169a39556",
+        "type": "PGP_ENCRYPT",
+        "z": "155f2ba0ea578ebf",
+        "name": "PGP_ENCRYPT",
+        "x": 870,
+        "y": 280,
+        "wires": [
+            [
+                "3385d237e8bffd72"
+            ]
+        ]
+    },
+    {
+        "id": "8ca477af0ac7f956",
+        "type": "function",
+        "z": "155f2ba0ea578ebf",
+        "name": "encrypt",
+        "func": "msg.encryption.serverPublicKey = msg.keyPair.publicKey\nmsg.encryption.rawText = \"test encrypt\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 280,
+        "wires": [
+            [
+                "2e89975169a39556"
+            ]
+        ]
+    },
+    {
+        "id": "b3cfdd8daa9f0892",
+        "type": "PGP_DECRYPT",
+        "z": "155f2ba0ea578ebf",
+        "name": "PGP_DECRYPT",
+        "x": 1270,
+        "y": 280,
+        "wires": [
+            [
+                "a5343258cdbf61ab"
+            ]
+        ]
+    },
+    {
+        "id": "3385d237e8bffd72",
+        "type": "function",
+        "z": "155f2ba0ea578ebf",
+        "name": "decrypt",
+        "func": "msg.encryption.userPrivateKey = msg.keyPair.privateKey\nmsg.encryption.encryptedMessage = msg.encrypted\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 280,
+        "wires": [
+            [
+                "b3cfdd8daa9f0892"
+            ]
+        ]
+    }
+]
