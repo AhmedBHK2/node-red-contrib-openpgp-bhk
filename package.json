@@ -7,6 +7,7 @@
   "dependencies": {
     "openpgp": "^5.11.1"
   },
+  "homepage": "https://github.com/AhmedBHK2",
   "repository": {
     "type": "git",
     "url": "https://github.com/AhmedBHK2/node-red-contrib-openpgp-bhk"
