@@ -16,6 +16,7 @@
     "OpenPGP"
   ],
   "node-red": {
+    "version": ">=2.0.0",
     "nodes": {
       "opengpg": "openpgp/openpgp.js"
     }
