@@ -1,5 +1,5 @@
 {
-  "name": "openpgp-bhk",
+  "name": "node-red-contrib-openpgp-bhk",
   "version": "1.1.2",
   "description": "OpenGPG Node by BHK.",
   "author": "Ahmed BHK <benhadjkhelifa.ahmed@gmail.com>",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AhmedBHK2/node-red-openpgp-bhk"
+    "url": "https://github.com/AhmedBHK2/node-red-contrib-openpgp-bhk"
   },
   "keywords": [
     "node-red",
