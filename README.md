@@ -1,10 +1,10 @@
-# node-red-contrib-openpgp-bhk
+# node-red-contrib-openpgp-by-bhk
 A package for[Node-RED](http://nodered.org) allowing to use pgp encryption within Node-RED.
 
 ## Install
 Use npm to install
 ```bash
-npm install node-red-contrib-openpgp-bhk
+npm install node-red-contrib-openpgp-by-bhk
 ```
 
 ## Nodes included in the package
