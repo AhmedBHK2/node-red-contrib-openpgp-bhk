@@ -3,25 +3,16 @@
 
  module.exports = function(RED) {
 
-    // function PGP_Sign(config) {
-    //     RED.nodes.createNode(this,config);
-    //     var node = this;
-    //     node.on('input', function(msg) {
-    //         msg.payload = msg.payload.toLowerCase();
-    //         node.send(msg);
-    //     });
-    // }
-
     function PGP_ENCRYPT(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.on('input', async function(msg) {
-            const serverPublicKeyArmored = decodeURIComponent(msg.encryption.serverPublicKey);
-            const serverPublicKey = await openpgp.readKey({ armoredKey: serverPublicKeyArmored });
+            const receiverPublicKeyArmored = decodeURIComponent(msg.encryption.receiverPublicKey);
+            const receiverPublicKey = await openpgp.readKey({ armoredKey: receiverPublicKeyArmored });
             const readableText = msg.encryption.rawText
             const encrypted = await openpgp.encrypt({
                 message: await openpgp.createMessage({ text: readableText }), // input as Message object
-                encryptionKeys: serverPublicKey
+                encryptionKeys: receiverPublicKey
             });
             msg.encrypted = encodeURIComponent(encrypted);
             node.send(msg);
@@ -34,23 +25,28 @@
         var node = this;
         node.on('input', async function(msg) {
             //const serverPublicKeyArmored = decodeURIComponent(msg.encryption.serverPublicKey);
-            const userPrivateKeyArmored = decodeURIComponent(msg.encryption.userPrivateKey);
+            const receiverPrivateKeyArmored = decodeURIComponent(msg.encryption.receiverPrivateKey);
             const passphrase = decodeURIComponent(msg.encryption.passphrase);
             const encryptedMessage = decodeURIComponent(msg.encryption.encryptedMessage);
-            console.log(encryptedMessage)
+            
+            //console.log(encryptedMessage)
             //const serverPublicKey = await openpgp.readKey({ armoredKey: serverPublicKeyArmored });
-            const userPrivateKey = await openpgp.decryptKey({
-                privateKey: await openpgp.readPrivateKey({ armoredKey: userPrivateKeyArmored }),
+            const receiverPrivateKey = await openpgp.decryptKey({
+                privateKey: await openpgp.readPrivateKey({ armoredKey: receiverPrivateKeyArmored }),
                 passphrase
             });
+            
             
             const message = await openpgp.readMessage({
                 armoredMessage: encryptedMessage // parse armored message
             });
 
-            const { data: decrypted, signatures } = await openpgp.decrypt({
+            //console.log(receiverPrivateKey)
+            //console.log("-------------------------------------------------------")
+            const { data: decrypted } = await openpgp.decrypt({
                 message,
-                decryptionKeys: userPrivateKey,
+                decryptionKeys: receiverPrivateKey,
+                expectSigned: false
             });
             msg.decrypted = encodeURIComponent(decrypted);
             node.send(msg);
@@ -73,7 +69,6 @@
 
             const {publicKey, privateKey} = await openpgp.generateKey(options);
             msg.keyPair = {publicKey, privateKey}
-            
             node.send(msg);
         });
     }
@@ -82,13 +77,13 @@
         RED.nodes.createNode(this,config);
         var node = this;
         node.on('input', async function(msg) {
-            const serverPublicKeyArmored = decodeURIComponent(msg.encryption.serverPublicKey);
-            const userPrivateKeyArmored = decodeURIComponent(msg.encryption.userPrivateKey);
+            const receiverPublicKeyArmored = decodeURIComponent(msg.encryption.receiverPublicKey);
+            const senderPrivateKeyArmored = decodeURIComponent(msg.encryption.senderPrivateKey);
             const passphrase = decodeURIComponent(msg.encryption.passphrase);
 
-            const serverPublicKey = await openpgp.readKey({ armoredKey: serverPublicKeyArmored });
-            const userPrivateKey = await openpgp.decryptKey({
-                privateKey: await openpgp.readPrivateKey({ armoredKey: userPrivateKeyArmored }),
+            const receiverPublicKey = await openpgp.readKey({ armoredKey: receiverPublicKeyArmored });
+            const senderPrivateKey = await openpgp.decryptKey({
+                privateKey: await openpgp.readPrivateKey({ armoredKey: senderPrivateKeyArmored }),
                 passphrase
             });
 
@@ -96,8 +91,8 @@
             
             const encrypted = await openpgp.encrypt({
                 message: await openpgp.createMessage({ text: readableText }), // input as Message object
-                encryptionKeys: serverPublicKey,
-                signingKeys: userPrivateKey
+                encryptionKeys: receiverPublicKey,
+                signingKeys: senderPrivateKey
             });
             msg.encrypted = encodeURIComponent(encrypted);
             node.send(msg);
@@ -108,26 +103,28 @@
         RED.nodes.createNode(this,config);
         var node = this;
         node.on('input', async function(msg) {
-            const serverPublicKeyArmored = decodeURIComponent(msg.encryption.serverPublicKey);
-            const userPrivateKeyArmored = decodeURIComponent(msg.encryption.userPrivateKey);
+            const senderPublicKeyArmored = decodeURIComponent(msg.encryption.senderPublicKey);
+            const receiverPrivateKeyArmored = decodeURIComponent(msg.encryption.receiverPrivateKey);
             const passphrase = decodeURIComponent(msg.encryption.passphrase);
             const encryptedMessage = decodeURIComponent(msg.encryption.encryptedMessage);
-            console.log(encryptedMessage)
-            const serverPublicKey = await openpgp.readKey({ armoredKey: serverPublicKeyArmored });
-            const userPrivateKey = await openpgp.decryptKey({
-                privateKey: await openpgp.readPrivateKey({ armoredKey: userPrivateKeyArmored }),
+            //console.log(senderPublicKeyArmored)
+            const senderPublicKey = await openpgp.readKey({ armoredKey: senderPublicKeyArmored });
+                        //console.log("-------------------------------------*********************************----------------")
+
+            const receiverPrivateKey = await openpgp.decryptKey({
+                privateKey: await openpgp.readPrivateKey({ armoredKey: receiverPrivateKeyArmored }),
                 passphrase
             });
-            
             const message = await openpgp.readMessage({
                 armoredMessage: encryptedMessage // parse armored message
             });
 
+
             const { data: decrypted, signatures } = await openpgp.decrypt({
                 message,
-                decryptionKeys: userPrivateKey,
+                decryptionKeys: receiverPrivateKey,
                 expectSigned: true,
-                verificationKeys: serverPublicKey,
+                verificationKeys: senderPublicKey,
             });
             msg.decrypted = encodeURIComponent(decrypted);
             node.send(msg);

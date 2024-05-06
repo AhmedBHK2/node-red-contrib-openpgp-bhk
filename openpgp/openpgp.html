@@ -52,7 +52,7 @@
         Inputs:<br>
 
         <ul>
-            <li>Receiver armored public key: <b> msg.encryption.serverPublicKey </b>( encodedURIComponent)</li>
+            <li>Receiver armored public key: <b> msg.encryption.receiverPublicKey </b>( encodedURIComponent)</li>
             <li>Clear text to encrypt: <b> msg.encryption.rawText </b>( encodedURIComponent)</li>
         </ul>
         <br>
@@ -93,7 +93,7 @@
         Inputs:<br>
 
         <ul>
-            <li>Receiver armored private key : <b>msg.encryption.userPrivateKey</b></li>
+            <li>Receiver armored private key : <b>msg.encryption.receiverPrivateKey</b></li>
             <li>Passphrase to decode private key: <b>msg.encryption.passphrase</b></li>
             <li>Encrypted pgp message: <b>msg.encryption.encryptedMessage</b></li>
         </ul>
@@ -134,8 +134,9 @@
         Inputs:<br>
 
         <ul>
-            <li>Sender armored private key : <b>msg.encryption.userPrivateKey</b></li>
-            <li>Receiver armored public key: <b> msg.encryption.serverPublicKey </b>( encodedURIComponent)</li>
+            <li>Sender armored private key : <b>msg.encryption.senderPrivateKey</b></li>
+            <li>Sender passphrase : <b>msg.encryption.passphrase</b></li>
+            <li>Receiver armored public key: <b> msg.encryption.receiverPublicKey </b>( encodedURIComponent)</li>
             <li>Clear text to encrypt: <b> msg.encryption.rawText </b>( encodedURIComponent)</li>
         </ul>
         <br>
@@ -176,8 +177,8 @@
         Inputs:<br>
 
         <ul>
-            <li>Receiver armored public key: <b> msg.encryption.serverPublicKey </b>( encodedURIComponent)</li>
-            <li>Receiver armored private key : <b>msg.encryption.userPrivateKey</b></li>
+            <li>Receiver armored public key: <b> msg.encryption.senderPublicKey </b>( encodedURIComponent)</li>
+            <li>Receiver armored private key : <b>msg.encryption.receiverPrivateKey</b></li>
             <li>Passphrase to decode private key: <b>msg.encryption.passphrase</b></li>
             <li>Encrypted pgp message: <b>msg.encryption.encryptedMessage</b></li>
         </ul>
