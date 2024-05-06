@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-openpgp-by-bhk",
   "version": "1.0.0",
-  "description": "OpenGPG Node by BHK.",
+  "description": "OpenPGP Node by BHK.",
   "author": "Ahmed BHK <benhadjkhelifa.ahmed@gmail.com>",
   "dependencies": {
     "openpgp": "^5.11.1"
